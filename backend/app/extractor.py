@@ -48,8 +48,9 @@ MONEY_PATTERN = re.compile(
 # Labeled money: "Total: $X" or "Total Due: $X" etc.
 # Requires $ sign to avoid matching percentages like "Tax (8.875%)"
 LABELED_MONEY_PATTERN = re.compile(
-    r"(?i)(total\s*(?:due)?|subtotal|amount\s*(?:due)?|balance|paid)\s*[:\-]\s*\$?\s?([\d,]+\.\d{2})"
-    r"|(?i)(tax)\s*(?:\([^)]*\))?\s*[:\-]\s*\$?\s?([\d,]+\.\d{2})",
+    r"(total\s*(?:due)?|subtotal|amount\s*(?:due)?|balance|paid)\s*[:\-]\s*\$?\s?([\d,]+\.\d{2})"
+    r"|(tax)\s*(?:\([^)]*\))?\s*[:\-]\s*\$?\s?([\d,]+\.\d{2})",
+    re.IGNORECASE,
 )
 
 DATE_PATTERN = re.compile(
