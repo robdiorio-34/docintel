@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+frontend/node_modules/
+backend/venv/
+
+# Build
+frontend/.next/
+frontend/out/
+__pycache__/
+*.pyc
+
+# Environment
+.env
+.env.local
+.env.production.local
+frontend/.env.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Models (cached, too large for git)
+backend/models/*.pt
+backend/models/*.onnx
+
+# Vercel
+.vercel
