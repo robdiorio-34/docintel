@@ -15,6 +15,7 @@ import {
   RefreshCw,
   FileText,
   Receipt,
+  BarChart3,
   Github,
 } from "lucide-react";
 import type { ProcessingResult } from "@/lib/types";
@@ -31,6 +32,12 @@ const SAMPLE_DOCS = [
     path: "/samples/receipt.png",
     icon: Receipt,
     description: "Metro Office Supply - $94.82",
+  },
+  {
+    name: "Budget",
+    path: "/samples/budget.png",
+    icon: BarChart3,
+    description: "Meridian Financial - Q4 2024",
   },
 ];
 
