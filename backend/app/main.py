@@ -1,13 +1,12 @@
 import time
 import logging
-from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.schemas import ProcessingResult, ExtractedField, HealthResponse
-from app.ocr import extract_text, get_predictor
-from app.classifier import classify_document, get_classifier
+from app.ocr import extract_text
+from app.classifier import classify_document
 from app.extractor import extract_fields
 
 logging.basicConfig(level=logging.INFO)
@@ -20,21 +19,10 @@ ALLOWED_TYPES = {
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # Preload models on startup
-    logger.info("Preloading models...")
-    get_predictor()
-    get_classifier()
-    logger.info("All models loaded.")
-    yield
-
-
 app = FastAPI(
     title="DocIntel API",
     description="Intelligent Payment Document Processor - OCR, Classification & Field Extraction",
     version="1.0.0",
-    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -72,11 +60,11 @@ async def process_document(file: UploadFile):
     ocr_text = extract_text(contents, file.filename or "image.png")
     logger.info(f"OCR extracted {len(ocr_text)} characters")
 
-    # Step 2: Classification
-    doc_type, confidence = classify_document(contents)
+    # Step 2: Classification (keyword-based, uses OCR text)
+    doc_type, confidence = classify_document(ocr_text)
     logger.info(f"Classified as: {doc_type} ({confidence:.2%})")
 
-    # Step 3: Field extraction
+    # Step 3: Field extraction (NER + regex)
     raw_fields = extract_fields(ocr_text)
     extracted_fields = [ExtractedField(**f) for f in raw_fields]
     logger.info(f"Extracted {len(extracted_fields)} fields")
